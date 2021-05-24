@@ -38,7 +38,7 @@ public:
     }
 
     Vector<T,size> operator*(const T& multiple) {
-        Vector<T,size> ret = m_array;
+        auto ret = *this;
         for (std::size_t i = 0; i < size; ++i) {
             ret[i] = ret[i]*multiple;
         }
@@ -46,7 +46,7 @@ public:
     }
 
     Vector<T,size> operator/(const T& divisor) {
-        Vector<T,size> ret = m_array;
+        auto ret = *this;
         for (std::size_t i = 0; i < size; ++i) {
             ret[i] = ret[i]/divisor;
         }
@@ -63,7 +63,7 @@ public:
     }
 
     Vector<T,size> operator+(const Vector<T,size>& other) {
-        Vector<T,size> ret = m_array;
+        auto ret = *this;
         for (std::size_t i = 0; i < size; ++i) {
             ret[i] += other[i];
         }
@@ -71,7 +71,7 @@ public:
     }
 
     Vector<T,size> operator-(const Vector<T,size>& other) {
-        Vector<T,size> ret = std::copy(m_array);
+        auto ret = *this;
         for (std::size_t i = 0; i < size; ++i) {
             ret[i] -= other[i];
         }
