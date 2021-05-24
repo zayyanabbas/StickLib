@@ -11,8 +11,8 @@ protected:
         ++free_idx;
     }
 public:
-    //Vector(Vector& copy) { std::copy(copy.m_array, m_array); }
-    template<typename _T, typename ...Ts, typename = std::enable_if<std::conjunction_v<std::is_same<T,Ts>...>>>
+    Vector(const Vector& copy) { memcpy(m_array, copy.m_array, size * sizeof *copy.m_array); }
+    template<typename _T, typename ...Ts, typename = std::enable_if<std::conjunction_v<std::is_same<T,Ts>...> && std::is_same<_T,T>::value >>
     Vector(_T first, Ts... other) {
         construct(first);
         construct(other...);
@@ -24,7 +24,7 @@ public:
     T magnitude() const {
         T sum_sqr = 0;
         for (std::size_t i; i < size; ++i) {
-            sum_sqr += this[i]*this[i];
+            sum_sqr += m_array[i]*m_array[i];
         }
         return sqrt(sum_sqr);
     }
@@ -32,7 +32,7 @@ public:
     T magnitude_sqr() const {
         T sum_sqr = 0;
         for (std::size_t i = 0; i < size; ++i) {
-            sum_sqr += this[i]*this[i];
+            sum_sqr += m_array[i]*m_array[i];
         }
         return sum_sqr;
     }
@@ -97,15 +97,22 @@ public:
 };
 
 template<typename T>
+Vector<T,2> get_perpendicular(const Vector<T,2>& vec) {
+    return Vector<T,2>({-vec[1], vec[0]});
+}
+
+template<typename T>
 struct Point2D {
     T x, y;
     Point2D(T x, T y) : x(x), y(y) {}
+    Point2D() = default;
 };
 
 template<typename T>
 struct Point3D {
     T x,y,z;
     Point3D(T x, T y, T z) : x(x), y(y), z(z) {}
+    Point3D() = default;
 };
 
 template<typename T, std::size_t size>
